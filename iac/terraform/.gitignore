@@ -1,0 +1,29 @@
+# Archivos de estado de Terraform
+*.tfstate
+*.tfstate.*
+
+# Archivos de crash log
+crash.log
+crash.*.log
+
+# Excluir archivos .tfvars (que pueden contener secretos)
+# Se recomienda usar un archivo como terraform.tfvars o personal.auto.tfvars
+# para variables sensibles y añadirlo al .gitignore global del proyecto.
+*.tfvars
+*.tfvars.json
+
+# Override files
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Archivos de configuración de CLI
+.terraformrc
+terraform.rc
+
+# Directorio .terraform (plugins, módulos, etc.)
+.terraform/
+
+# Archivos de plan de Terraform (pueden contener información sensible)
+*.tfplan
