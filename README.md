@@ -1,45 +1,58 @@
-# Afiliados - Gestión de Información de Contacto
+# Afiliados - Contact Information Management
 
-Este proyecto contiene:
-- **backend/Afiliados.Api**: API RESTful en ASP.NET Core (.NET 9.0)
-- **frontend**: Aplicación React con TypeScript
+This project contains:
+- **backend/Afiliados.Api**: ASP.NET Core RESTful API (.NET 9.0)
+- **frontend**: React application with TypeScript
 
-## Primeros pasos
+## Getting Started
 
 ### Backend
 ```powershell
 cd backend
-# Para ejecutar la API
+# To run the API
  dotnet run
 ```
 
 ### Frontend
 ```powershell
 cd frontend
-# Para iniciar la app React
+# To start the React app
 npm start
 ```
 
 ---
 
-## Descripción
-Aplicación para el mantenimiento de la información de contacto de afiliados.
+## Description
+Application for maintaining contact information of affiliates.
 
 ---
 
-## Gestión de Base de Datos con Flyway
+## Database Management with Flyway
 
-Este proyecto utiliza Flyway para gestionar las migraciones del esquema de la base de datos.
-Para instrucciones detalladas sobre cómo configurar y usar Flyway, consulta el archivo:
+This project uses Flyway to manage database schema migrations.
+For detailed instructions on how to set up and use Flyway, refer to the file:
 `backend/db/README.md`
 
-Los scripts de migración SQL se encuentran en `backend/db/migration/`.
+SQL migration scripts are located in `backend/db/migration/`.
 
 ---
 
-## Despliegue de Infraestructura con Terraform
+## Infrastructure Deployment with Terraform
 
-Este proyecto utiliza Terraform para definir y desplegar la infraestructura en Azure.
-Los scripts de Terraform se encuentran en la carpeta `iac/terraform/`.
-Para instrucciones detalladas sobre cómo configurar y usar Terraform, consulta el archivo:
+This project uses Terraform to define and deploy infrastructure on Azure.
+Terraform scripts are located in the `iac/terraform/` folder.
+For detailed instructions on how to set up and use Terraform, refer to the file:
 `iac/terraform/README.md`
+
+---
+
+## CI/CD Pipelines
+
+This project uses GitHub Actions for continuous integration and deployment. The following workflows are available:
+
+1. **Infrastructure Deployment (Terraform)**: Deploys Azure infrastructure when changes are pushed to the `iac/terraform/` directory.
+2. **Database Migrations (Flyway)**: Applies database migrations when changes are pushed to the `backend/db/migration/` directory.
+3. **Backend API (.NET)**: Builds and deploys the ASP.NET Core API when changes are pushed to the `backend/` directory.
+4. **Frontend (React)**: Builds and deploys the React application when changes are pushed to the `frontend/` directory.
+
+GitHub Actions workflow files are located in the `.github/workflows/` directory.

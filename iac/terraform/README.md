@@ -1,73 +1,73 @@
-# Despliegue de Infraestructura con Terraform
+# Infrastructure Deployment with Terraform
 
-Este directorio contiene los scripts de Terraform para definir y desplegar la infraestructura de la aplicación Afiliados en Azure.
+This directory contains the Terraform scripts to define and deploy the Afiliados application infrastructure on Azure.
 
-## Prerrequisitos
+## Prerequisites
 
-1.  **Instalar Terraform CLI**: Descarga e instala Terraform desde [terraform.io](https://www.terraform.io/downloads.html).
-2.  **Azure CLI**: Asegúrate de tener Azure CLI instalado y configurado. Inicia sesión con `az login`.
-3.  **Configurar Variables de Terraform**:
-    *   Revisa y ajusta los valores por defecto en `variables.tf` según tus necesidades (nombres únicos globales para recursos, región, etc.).
-    *   Para variables sensibles como `sql_admin_password`, crea un archivo llamado `terraform.tfvars` (o `personal.auto.tfvars`) en este directorio (`iac/terraform/`) y define ahí la variable. Este archivo está ignorado por Git gracias al `.gitignore` en este mismo directorio.
-        
-        **Ejemplo de `terraform.tfvars`**:
+1.  **Install Terraform CLI**: Download and install Terraform from [terraform.io](https://www.terraform.io/downloads.html).
+2.  **Azure CLI**: Ensure you have Azure CLI installed and configured. Log in with `az login`.
+3.  **Configure Terraform Variables**:
+    *   Review and adjust the default values in `variables.tf` according to your needs (globally unique names for resources, region, etc.).
+    *   For sensitive variables like `sql_admin_password`, create a file named `terraform.tfvars` (or `personal.auto.tfvars`) in this directory (`iac/terraform/`) and define the variable there. This file is ignored by Git thanks to the `.gitignore` in this same directory.
+
+        **Example of `terraform.tfvars`**:
         ```terraform
-        sql_admin_password = "TuContraseñaSuperSegura123!"
-        
-        # Asegúrate de que estos nombres sean globalmente únicos si los por defecto no lo son:
-        # backend_app_service_name       = "app-afiliados-api-tualiasunico"
-        # frontend_static_web_app_name = "stapp-afiliados-frontend-tualiasunico"
-        # sql_server_name                = "sql-afiliados-server-tualiasunico"
-        # key_vault_name                 = "kv-afiliados-secrets-tualiasunico"
+        sql_admin_password = "YourSuperSecurePassword123!"
+
+        # Ensure these names are globally unique if the defaults are not:
+        # backend_app_service_name       = "app-afiliados-api-youruniqualias"
+        # frontend_static_web_app_name = "stapp-afiliados-frontend-youruniqualias"
+        # sql_server_name                = "sql-afiliados-server-youruniqualias"
+        # key_vault_name                 = "kv-afiliados-secrets-youruniqualias"
         ```
 
-## Comandos de Terraform
+## Terraform Commands
 
-Ejecuta los siguientes comandos desde este directorio (`iac/terraform/`):
+Run the following commands from this directory (`iac/terraform/`):
 
-1.  **Inicializar Terraform**:
-    Descarga los proveedores necesarios y prepara el entorno de Terraform.
+1.  **Initialize Terraform**:
+    Downloads the necessary providers and prepares the Terraform environment.
     ```powershell
     terraform init
     ```
 
-2.  **Validar la Configuración** (Opcional):
-    Comprueba la sintaxis de tus archivos de Terraform.
+2.  **Validate Configuration** (Optional):
+    Checks the syntax of your Terraform files.
     ```powershell
     terraform validate
     ```
 
-3.  **Crear un Plan de Ejecución**:
-    Muestra los cambios que Terraform realizará en tu infraestructura sin aplicarlos.
+3.  **Create an Execution Plan**:
+    Shows the changes Terraform will make to your infrastructure without applying them.
     ```powershell
     terraform plan -out=tfplan
     ```
 
-4.  **Aplicar el Plan**:
-    Crea o actualiza la infraestructura en Azure según el plan generado.
+4.  **Apply the Plan**:
+    Creates or updates the infrastructure in Azure according to the generated plan.
     ```powershell
     terraform apply "tfplan"
     ```
-    Alternativamente, puedes aplicar directamente (Terraform te pedirá confirmación):
+    Alternatively, you can apply directly (Terraform will ask for confirmation):
     ```powershell
     terraform apply
     ```
 
-5.  **Ver Salidas** (Opcional):
-    Muestra los valores de salida definidos en `outputs.tf` (ej. URLs, nombres de recursos).
+5.  **View Outputs** (Optional):
+    Displays the output values defined in `outputs.tf` (e.g., URLs, resource names).
     ```powershell
     terraform output
     ```
 
-6.  **Destruir la Infraestructura**:
-    **¡PRECAUCIÓN!** Este comando eliminará todos los recursos gestionados por Terraform en Azure según la configuración actual. Úsalo con cuidado.
+6.  **Destroy Infrastructure**:
+    **WARNING!** This command will delete all Terraform-managed resources in Azure according to the current configuration. Use with caution.
     ```powershell
     terraform destroy
     ```
 
-## Notas Importantes
+## Important Notes
 
-*   **Nombres Únicos Globales**: Varios recursos de Azure (App Services, SQL Server, Key Vault, Static Web Apps) requieren nombres únicos globalmente. Asegúrate de ajustar los valores por defecto en `variables.tf` o en tu archivo `.tfvars` para evitar conflictos.
-*   **Estado de Terraform**: Terraform guarda el estado de tu infraestructura en un archivo local `terraform.tfstate`. Para colaboración en equipo o entornos de producción, es altamente recomendable configurar un [backend remoto para el estado](https://www.terraform.io/language/state/backends) (ej. Azure Blob Storage).
-*   **Key Vault y Secretos**: Los scripts crean un Azure Key Vault. La intención es almacenar secretos como la cadena de conexión de la base de datos en Key Vault y que tus aplicaciones (App Service) accedan a ellos mediante Managed Identities. El archivo `main.tf` incluye un ejemplo comentado de cómo crear un secreto; deberás adaptarlo y habilitar las políticas de acceso necesarias para tus aplicaciones.
-*   **Static Web Apps CI/CD**: La creación de la Static Web App mediante Terraform es básica. La configuración del repositorio de código fuente para el despliegue continuo (CI/CD) generalmente se completa a través del portal de Azure o mediante pipelines de Azure DevOps/GitHub Actions después de que el recurso Static Web App es creado por Terraform.
+*   **Globally Unique Names**: Several Azure resources (App Services, SQL Server, Key Vault, Static Web Apps) require globally unique names. Ensure you adjust the default values in `variables.tf` or in your `.tfvars` file to avoid conflicts.
+*   **Terraform State**: Terraform saves the state of your infrastructure in a local file `terraform.tfstate`. For team collaboration or production environments, it is highly recommended to configure a [remote backend for the state](https://www.terraform.io/language/state/backends) (e.g., Azure Blob Storage).
+*   **Key Vault and Secrets**: The scripts create an Azure Key Vault. The intention is to store secrets like the database connection string in Key Vault and have your applications (App Service) access them via Managed Identities. The `main.tf` file includes a commented example of how to create a secret; you will need to adapt it and enable the necessary access policies for your applications.
+*   **Static Web Apps CI/CD**: The creation of the Static Web App via Terraform is basic. The configuration of the source code repository for continuous deployment (CI/CD) is usually completed through the Azure portal or via Azure DevOps/GitHub Actions pipelines after the Static Web App resource is created by Terraform.
